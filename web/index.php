@@ -12,6 +12,8 @@
         background-color: #3B653D;
         color: #fff;
         padding: 10px;
+        word-wrap: break-word;
+        white-space: pre-wrap;
         -webkit-border-radius: 6px;
         -moz-border-radius: 6px;
         border-radius: 6px;         
@@ -27,12 +29,12 @@
       include '../rsa/Helper.php';
 
       $oRsa = new Zaffius\rsa\Rsa();
-      $help = new Zaffius\rsa\Helper(10);
+      $help = new Zaffius\rsa\Helper(16);
       
       //////////////////////////////////////////////////////////////////////////
       // Generate the keys
       //////////////////////////////////////////////////////////////////////////
-      $bitlen = null;
+      $bitlen = 128;
       $e = 3;
       $p = 5;
       $q = 11;

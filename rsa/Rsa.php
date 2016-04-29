@@ -36,7 +36,7 @@ class Rsa {
    */
   public function generate($nBits, $e = null, $pp = null, $pq = null) {
     
-    $k = new Keys(); $help = new Helper(); $i=0;
+    $k = new Keys(); $i=0;
     
     $k->e = gmp_nextprime( !$nBits ? $e - 1 : $nBits );
         
