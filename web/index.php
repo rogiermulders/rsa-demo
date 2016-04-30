@@ -23,26 +23,35 @@
 
   <body>
     <?php
-      session_start();
+      
       include '../rsa/Rsa.php';
       include '../rsa/Keys.php';
       include '../rsa/Helper.php';
 
       $oRsa = new Zaffius\rsa\Rsa();
-      $help = new Zaffius\rsa\Helper(16);
+      $k    = new Zaffius\rsa\Keys();
+      $help = new Zaffius\rsa\Helper(10);
+      
+      session_start();
       
       //////////////////////////////////////////////////////////////////////////
       // Generate the keys
       //////////////////////////////////////////////////////////////////////////
-      $bitlen = 128;
+      $bitlen = null;
       $e = 3;
       $p = 5;
       $q = 11;
-      
-      $k = $oRsa->generate($bitlen,$e,$p,$q);
 
+      $reuseKey = false;
+      
+      if($reuseKey && isset($_SESSION['k'])){
+        $k = $_SESSION['k'];
+      } else {
+        $k = $_SESSION['k'] = $oRsa->generate($bitlen,$e,$p,$q);
+      }
+      
       $help->rprint(
-        "p: prime, q: prime, φ: euler totient, e: public key, n: public key, d private key"
+        "p: prime, q: prime, φ: euler totient, e: public key, n: shared key, d private key"
       );
 
       $help->rprint(
@@ -54,8 +63,9 @@
 
       $help->rprint(
         'Calculate d:',
-        "e * d mod φ = 1",
-        "$k->e * $k->d mod $k->phi = 1",
+        "-- e * d mod φ = 1 --",
+        "$k->e * d mod $k->phi = 1",
+        
         "d = $k->d"
       );
 
@@ -65,22 +75,23 @@
 
       
       // i: information (number or string)
-      $i = 'Hello world!';
-      // $i = 50;
+      //$i = 'Hello world!';
+      $i = 25;
             
       // m: message (number)
       $m = $help->strToGmp($i);
-      $c = $oRsa->endcode( $m , $k->e, $k->n );
       
-      $help->rprint("e: public key, n: public key, d: private key, m: message, c: cyphertext");
+      $c = $oRsa->endcode( $m , $k->e, $k->n );
+
+      $help->rprint("e: public key, n: shared key, d: private key, m: message, c: cyphertext");
       $help->rprint(
         "Encoding m:",
         "i = $i => m = " . ( is_int($i) ? $i : $m ),
         '-- m ^ e mod n = c --',
-        "$m ^ $k->e mod $k->n = $c",
+        "$m ^ $k->e mod $k->n = c",
         "c = $c"
       );
-      
+
       //////////////////////////////////////////////////////////////////////////
       // Decode
       //////////////////////////////////////////////////////////////////////////
@@ -92,7 +103,7 @@
         "Decoding c:",
         "c = $c",
         '-- c ^ d mod n = m --',
-        "$c ^ $k->d mod $k->n = $dm",
+        "$c ^ $k->d mod $k->n = m",
         ( is_int($i) ? "m = $dm" : "m = $dm => '$asString'") 
       );
 
@@ -107,34 +118,46 @@
         "Signing m:",
         "myHash('$i') = $h",
         "-- m ^ d mod n = c --",
-        "$h ^ $k->d mod $k->n = $s",
-        "Signed with: = $s"
+        "$h ^ $k->d mod $k->n = signature",
+        "signature = $s"
       );
 
       //////////////////////////////////////////////////////////////////////////
       // Verifying
       //////////////////////////////////////////////////////////////////////////
-
-      $v = $oRsa->endcode($s, $k->e, $k->n);
-
+      
+      //////////////////////////////////////////////////////////////////////////
       // Fake message
-      // $i = 'Fake message!';
-
+      //////////////////////////////////////////////////////////////////////////
+      
+      //$i = 'Fake message!';
+      //$s = 123456789;
+      $i = 24;
+      $s = 16;
+      
+      // Show message
+      $help->rprint(
+        $i,
+        '',
+        $s
+      );
+      
+      $v = $oRsa->endcode($s, $k->e, $k->n);
+      
       $h = $help->myHash($i);
-
+      
+      // Make some color.. 
       $result = ($h == $v) ? "<span style=color:lightgreen>Valid! ($h == $v)</span>" : "<span style=color:salmon>Invalid! ($h != $v)</span>";
       
       $help->rprint(
         "Verifying '$i':",
-        "Signed with: $s",      
+        "signatute: $s",      
         "-- c ^ e mod n = m --",
-        "$s ^ $k->e mod $k->n = $v",
+        "$s ^ $k->e mod $k->n = signature hash",
+        "signature hash = $v",
         "myHash('$i') = $h $result  "
-        );
-
-
-
-    
+      );
+      
     ?>
   </body>
 

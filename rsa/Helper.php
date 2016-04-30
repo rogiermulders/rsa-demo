@@ -15,9 +15,9 @@ class Helper {
     $str = (string) $str;
     $total = 0;
     for($i=0;$i<strlen($str);$i++){      
-      $total += gmp_powm(3, ord($str[$i]), 55);
+      $total += gmp_powm(3, ord($str[$i]), 33);
     }
-    return gmp_mod($total, 55);    
+    return gmp_mod($total, 33);    
   }
   
   public function rprint() {
