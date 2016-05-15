@@ -37,6 +37,7 @@ class Helper {
             case 16:
               return '0x' . (strlen($str) > 1 ? $str : '0' . $str);
             case 10:
+              //return $str;
               return strrev(implode('.',str_split( strrev( $str), 3)));
             case 2:
               return $str;
@@ -69,6 +70,21 @@ class Helper {
   public function gmpToStr($gmp_number) {
     $hex = gmp_strval($gmp_number, 16);
     return pack('H*', $hex);
+  }
+  /**
+   * 
+   * @param type $nBits
+   * @return \GMP
+   */
+  public static function createRandomPrime($nBits) {
+    $prePrime = '0X';
+
+    $n = $nBits / 16;
+
+    for ($i = 0; $i < $n; $i++) {
+      $prePrime .= sprintf('%02X', rand(($i ? 0 : 0), 255));
+    }
+    return gmp_nextprime($prePrime);
   }
 
 

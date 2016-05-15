@@ -1,6 +1,7 @@
 <?php
 
 namespace Zaffius\rsa;
+use Zaffius\rsa\Helper;
 
 class Rsa {
   
@@ -36,6 +37,8 @@ class Rsa {
    */
   public function generate($nBits, $e = null, $pp = null, $pq = null) {
     
+    
+    
     $k = new Keys(); $i=0;
     
     $k->e = gmp_nextprime( !$nBits ? $e - 1 : $nBits );
@@ -43,8 +46,8 @@ class Rsa {
     // φ mod e should not be 0! init to 0 so it runs once at least
     $phi = 0;
     while (gmp_cmp(gmp_mod($phi, $k->e), 0) === 0) {
-      $p = !$nBits ? gmp_init($pp) : $this->createRandomPrime($nBits);
-      $q = !$nBits ? gmp_init($pq) : $this->createRandomPrime($nBits);
+      $p = !$nBits ? gmp_init($pp) : Helper::createRandomPrime($nBits);
+      $q = !$nBits ? gmp_init($pq) : Helper::createRandomPrime($nBits);
   
       // Calc phi
       $phi = gmp_mul(gmp_sub($p, 1), gmp_sub($q, 1));
@@ -94,21 +97,6 @@ class Rsa {
       }
     }
     return $inp->rb;
-  }
-  /**
-   * 
-   * @param type $nBits
-   * @return \GMP
-   */
-  public function createRandomPrime($nBits) {
-    $prePrime = '0X';
-
-    $n = $nBits / 16;
-
-    for ($i = 0; $i < $n; $i++) {
-      $prePrime .= sprintf('%02X', rand(($i ? 0 : 0), 255));
-    }
-    return gmp_nextprime($prePrime);
   }
   
 }
