@@ -37,9 +37,7 @@
       $help->rprint(
         "p: prime, q: prime, φ: euler totient, e: public key, n: shared key, d private key"
       );
-
       
-      if( 3 == @$_GET['s'] ){
       $help->rprint(
         "p = $k->p, q = $k->q", 
         "e = $k->e", 
@@ -54,19 +52,14 @@
         
         "d = $k->d"
       );
-      }
+      
       //////////////////////////////////////////////////////////////////////////
       // Endcode
       //////////////////////////////////////////////////////////////////////////
 
-      
-      
+           
       // m: message (number)
       $m = $help->strToGmp($i);
-      
-      
-      
-      if( 1 == @$_GET['s'] ){
       
       $c = $oRsa->endcode( $m , $k->e, $k->n );
 
@@ -105,8 +98,8 @@
         "$c ^ $k->d mod $k->n = m",
         ( is_int($i) ? "m = $dm" : "m = $dm => '$asString'") 
       );
-      }
-      if( 2 == @$_GET['s'] ){
+      
+      
       
       //////////////////////////////////////////////////////////////////////////
       // Signing
@@ -154,7 +147,7 @@
         "signature hash = $v",
         "myHash('$i') = $h $result  "
       );
-      }
+
     ?>
 
 <?php include('includes/footer.php') ?>
