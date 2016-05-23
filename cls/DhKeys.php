@@ -14,5 +14,5 @@ namespace Zaffius\rsa;
  * @author rm
  */
 class DhKeys {
-  public $g, $p, $a, $b, $s;
+  public $g, $p, $l, $a, $b, $s;
 }

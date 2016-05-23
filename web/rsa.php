@@ -15,11 +15,17 @@
       //////////////////////////////////////////////////////////////////////////
       // Generate the keys
       //////////////////////////////////////////////////////////////////////////
-      $bitlen = 1024;
+      $bitlen = null;
       $e = 3;
       $p = 5;
       $q = 11;
 
+      // i: information (number or string)
+      $i = 'Hello world!';
+      $i = 20;
+
+      
+      
       $reuseKey = false;
       
       if($reuseKey && isset($_SESSION['k'])){
@@ -32,6 +38,8 @@
         "p: prime, q: prime, φ: euler totient, e: public key, n: shared key, d private key"
       );
 
+      
+      if( 3 == @$_GET['s'] ){
       $help->rprint(
         "p = $k->p, q = $k->q", 
         "e = $k->e", 
@@ -46,18 +54,19 @@
         
         "d = $k->d"
       );
-
+      }
       //////////////////////////////////////////////////////////////////////////
       // Endcode
       //////////////////////////////////////////////////////////////////////////
 
       
-      // i: information (number or string)
-      $i = 'Hello world!';
-      //$i = 25;
-            
+      
       // m: message (number)
       $m = $help->strToGmp($i);
+      
+      
+      
+      if( 1 == @$_GET['s'] ){
       
       $c = $oRsa->endcode( $m , $k->e, $k->n );
 
@@ -74,10 +83,14 @@
       // Decode
       //////////////////////////////////////////////////////////////////////////
       
+      $c64 = base64_encode(gmp_strval($c));
+      
+      $c64 = implode("\n",str_split($c64, 65));
+      
       // Show message
       $help->rprint(
-        '-----BEGIN RSA MESSAGE-----',
-        $c,
+        '-----BEGIN RSA MESSAGE-----','',
+        $c64,
         '-----END RSA MESSAGE-----'
       );
       
@@ -92,7 +105,9 @@
         "$c ^ $k->d mod $k->n = m",
         ( is_int($i) ? "m = $dm" : "m = $dm => '$asString'") 
       );
-
+      }
+      if( 2 == @$_GET['s'] ){
+      
       //////////////////////////////////////////////////////////////////////////
       // Signing
       //////////////////////////////////////////////////////////////////////////
@@ -139,7 +154,7 @@
         "signature hash = $v",
         "myHash('$i') = $h $result  "
       );
-      
+      }
     ?>
 
 <?php include('includes/footer.php') ?>

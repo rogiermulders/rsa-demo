@@ -77,14 +77,17 @@ class Helper {
    * @return \GMP
    */
   public static function createRandomPrime($nBits) {
-    $prePrime = '0X';
-
-    $n = $nBits / 16;
-
-    for ($i = 0; $i < $n; $i++) {
-      $prePrime .= sprintf('%02X', rand(($i ? 0 : 0), 255));
-    }
-    return gmp_nextprime($prePrime);
+    
+    $n = gmp_random_bits($nBits/2);
+//    
+//    $prePrime = '0X';
+//
+//    $n = $nBits / 16;
+//
+//    for ($i = 0; $i < $n; $i++) {
+//      $prePrime .= sprintf('%02X', rand(($i ? 0 : 0), 255));
+//    }
+    return gmp_nextprime($n);
   }
 
 

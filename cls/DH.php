@@ -37,17 +37,18 @@ class DH {
     if(is_string($p)){
       $oKeys->p = gmp_init($p);
       $oKeys->g = gmp_init($g);
+      // Set bitlen of secrets
+      $oKeys->l = strlen(gmp_strval($oKeys->p,2))-1;      
       return $oKeys;
     }
 
-
-    $oKeys->g = $this->findSmallestGenerator($p);
     $oKeys->p = $p;
-
     
+    $oKeys->g = $this->findSmallestGenerator($oKeys->p);
+        
+    // Set bitlen of secrets
+    $oKeys->l = strlen(gmp_strval($oKeys->p,2))-1;
     
-    
-    //$this->help->rprint($oKeys->g);
     
     return $oKeys;
   }
@@ -104,6 +105,8 @@ class DH {
       $test = gmp_mod($n, $tryFactor);
 
       while (0 == $test) {
+        // I add the _ so the key of the array $foundPrimes will be a string 
+        // looks like php convers string to int in this case (maybe)
         $strVal = '_' . gmp_strval($tryFactor);
         isset($foundPrimes[$strVal]) ? $foundPrimes[$strVal]++ : $foundPrimes[$strVal] = 1;
         

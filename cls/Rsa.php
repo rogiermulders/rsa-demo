@@ -45,6 +45,11 @@ class Rsa {
         
     // φ mod e should not be 0! init to 0 so it runs once at least
     $phi = 0;
+    
+    $test = gmp_gcd($phi, $e);
+    
+    $k->e = gmp_init($e);
+    
     while (gmp_cmp(gmp_mod($phi, $k->e), 0) === 0) {
       $p = !$nBits ? gmp_init($pp) : Helper::createRandomPrime($nBits);
       $q = !$nBits ? gmp_init($pq) : Helper::createRandomPrime($nBits);
