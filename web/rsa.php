@@ -16,12 +16,12 @@
       // Generate the keys
       //////////////////////////////////////////////////////////////////////////
       $bitlen = null;
-      $e = 3;
-      $p = 5;
-      $q = 11;
+      $e = 5;
+      $p = 3;
+      $q = 24499;
 
       // i: information (number or string)
-//      $i = 'Hello world!';
+//    $i = 'Hello world!';
       $i = '*';
       
       $reuseKey = false;
@@ -33,7 +33,7 @@
       }
       
       include('print/basics.php');
-      // include('print/calculatesecret.php');
+      include('print/calculatesecret.php');
       
       //////////////////////////////////////////////////////////////////////////
       // Endcode
