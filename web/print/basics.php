@@ -1,6 +1,9 @@
 <?php
       $help->rprint(
-        "p: prime, q: prime, φ: euler totient, e: public key, n: shared key, d private key"
+        "p: prime, q: prime, φ: euler totient, e: public key, n: shared key, d private key",'',
+        
+        "i: information (the 'string' we want to encrypt), m: i but now as a number, c: the cypher text"
+          
       );
       
       $help->rprint(

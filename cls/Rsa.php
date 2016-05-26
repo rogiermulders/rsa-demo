@@ -62,7 +62,7 @@ class Rsa {
     // Calc n
     //$k->n = gmp_mul($p, $q);
     
-    $k->n = $p * $q;
+    $k->n = $p * $q; // as of php5.6
     
     // Calc d -> e * d mod φ = 1  
     $k->d = $this->ExtendedEuclidian($phi, $k->e);

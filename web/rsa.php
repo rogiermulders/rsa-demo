@@ -16,13 +16,14 @@
       // Generate the keys
       //////////////////////////////////////////////////////////////////////////
       $bitlen = null;
-      $e = 5;
-      $p = 3;
-      $q = 24499;
+      $e = 3;
+      $p = 5;
+      $q = 11;
 
       // i: information (number or string)
-//    $i = 'Hello world!';
-      $i = '*';
+    $i = 'Hello world!';
+      $i = '!';
+      //$i = 33;
       
       $reuseKey = false;
       
@@ -44,7 +45,7 @@
       // c: cyphertext
       $c = $oRsa->endcode( $m , $k->e, $k->n );
 
-      include('print/encode.php');      
+       include('print/encode.php');      
       //////////////////////////////////////////////////////////////////////////
       // Decode
       //////////////////////////////////////////////////////////////////////////
@@ -61,17 +62,17 @@
       $h = $help->myHash($i);
       $s = $oRsa->decode($h, $k->d, $k->n);
 
-//      include('print/sign.php');
+      include('print/sign.php');
       //////////////////////////////////////////////////////////////////////////
       // Verifying
       //////////////////////////////////////////////////////////////////////////
       
       // Fake
-      // $i = 'Fake message!';
+      $i = 'Fake message!';
       $v = $oRsa->endcode($s, $k->e, $k->n);      
       $h = $help->myHash($i);
             
-//      include('print/verify.php');
+      include('print/verify.php');
       
     ?>
 
